@@ -12,6 +12,7 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
+  app.setGlobalPrefix('api/v1');
 
   const appConfig = app.get(ConfigService);
 
@@ -25,8 +26,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
-
-  app.setGlobalPrefix('api/v1');
 
   await app.listen(appConfig.get('port'), '0.0.0.0');
 }
