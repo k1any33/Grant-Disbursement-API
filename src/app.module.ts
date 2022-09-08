@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import configuration from './config/configuration';
+import { HealthModule } from './modules/health/health.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import configuration from './config/configuration';
         uri: configService.get('mongouri'),
       }),
     }),
+    HealthModule,
   ],
   controllers: [],
   providers: [ConfigService],

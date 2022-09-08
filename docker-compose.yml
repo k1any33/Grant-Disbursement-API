@@ -8,8 +8,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./:/app
-      - /home/node/node_modules
+      - .:/home/node
   mongo:
     image: mongo
     ports:
