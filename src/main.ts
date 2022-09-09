@@ -6,6 +6,7 @@ import {
 import { AppModule } from './app.module'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { ConfigService } from '@nestjs/config'
+import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -13,6 +14,7 @@ async function bootstrap() {
     new FastifyAdapter(),
   )
   app.setGlobalPrefix('api/v1')
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
 
   const appConfig = app.get(ConfigService)
 
