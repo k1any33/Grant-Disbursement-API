@@ -7,6 +7,8 @@ import {
 } from '@nestjs/platform-fastify'
 import { Test } from '@nestjs/testing'
 import { MongoMemoryServer } from 'mongodb-memory-server-global-4.4'
+import { Household, HouseholdSchema } from '../../src/entities/household.entity'
+import { HouseholdModule } from '../../src/modules/household/household.module'
 import { HealthModule } from '../../src/modules/health/health.module'
 
 let mongod: MongoMemoryServer
@@ -40,8 +42,12 @@ async function createAppMock(): Promise<NestFastifyApplication> {
         ignoreEnvFile: true,
       }),
       HealthModule,
+      HouseholdModule,
+
       rootMongooseTestModule(),
-      MongooseModule.forFeature([]),
+      MongooseModule.forFeature([
+        { schema: HouseholdSchema, name: Household.name },
+      ]),
     ],
     providers: [ConfigService],
   }).compile()
