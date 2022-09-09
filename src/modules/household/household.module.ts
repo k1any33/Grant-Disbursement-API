@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
-import { HouseholdSchema } from 'src/entities/household.entity'
+import { HouseholdSchema } from '../../entities/household.entity'
 import { HouseholdController } from './household.controller'
 import { HouseholdService } from './household.service'
 

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { HouseholdType } from 'src/types/household.type'
+import { HousingType } from '../types/housing.type'
 import {
   HouseholdMember,
   HouseholdMemberSchema,
@@ -18,10 +18,10 @@ export class Household {
   readonly householdId: string
 
   @Prop({ required: true, type: String })
-  readonly householdType: HouseholdType
+  readonly housingType: HousingType
 
-  @Prop({ required: false, type: HouseholdMemberSchema, default: [] })
-  readonly householdMembers: HouseholdMember
+  @Prop({ required: false, type: [HouseholdMemberSchema], default: [] })
+  readonly householdMembers?: HouseholdMember[]
 }
 
 export const HouseholdSchema = SchemaFactory.createForClass(Household)
