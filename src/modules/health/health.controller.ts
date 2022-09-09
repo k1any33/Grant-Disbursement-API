@@ -1,9 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common'
 import {
   HealthCheckService,
   HealthCheck,
   MongooseHealthIndicator,
-} from '@nestjs/terminus';
+} from '@nestjs/terminus'
 
 @Controller('health')
 export class HealthController {
@@ -15,6 +15,6 @@ export class HealthController {
   @Get()
   @HealthCheck()
   check() {
-    return this.health.check([() => this.mongo.pingCheck('mongo')]);
+    return this.health.check([() => this.mongo.pingCheck('mongo')])
   }
 }
