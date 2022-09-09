@@ -1,20 +1,20 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core'
 import {
   FastifyAdapter,
   NestFastifyApplication,
-} from '@nestjs/platform-fastify';
-import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
+} from '@nestjs/platform-fastify'
+import { AppModule } from './app.module'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
+import { ConfigService } from '@nestjs/config'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
-  );
-  app.setGlobalPrefix('api/v1');
+  )
+  app.setGlobalPrefix('api/v1')
 
-  const appConfig = app.get(ConfigService);
+  const appConfig = app.get(ConfigService)
 
   const config = new DocumentBuilder()
     .setTitle('Grant Disbursement API')
@@ -23,10 +23,10 @@ async function bootstrap() {
     )
     .setVersion('1.0')
     .addTag('')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+    .build()
+  const document = SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('api-docs', app, document)
 
-  await app.listen(appConfig.get('port'), '0.0.0.0');
+  await app.listen(appConfig.get('port'), '0.0.0.0')
 }
-bootstrap();
+bootstrap()

@@ -1,14 +1,14 @@
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose'
 import {
   FastifyAdapter,
   NestFastifyApplication,
-} from '@nestjs/platform-fastify';
-import { Test } from '@nestjs/testing';
-import { MongoMemoryServer } from 'mongodb-memory-server-global-4.4';
-import { HealthModule } from '../../src/modules/health/health.module';
+} from '@nestjs/platform-fastify'
+import { Test } from '@nestjs/testing'
+import { MongoMemoryServer } from 'mongodb-memory-server-global-4.4'
+import { HealthModule } from '../../src/modules/health/health.module'
 
-let mongod: MongoMemoryServer;
+let mongod: MongoMemoryServer
 
 export const rootMongooseTestModule = (options: MongooseModuleOptions = {}) =>
   MongooseModule.forRootAsync({
@@ -16,19 +16,19 @@ export const rootMongooseTestModule = (options: MongooseModuleOptions = {}) =>
       if (!mongod) {
         mongod = await MongoMemoryServer.create({
           binary: { version: '4.4.10' },
-        });
+        })
       }
-      const mongoUri = mongod.getUri();
+      const mongoUri = mongod.getUri()
       return {
         uri: mongoUri,
         ...options,
-      };
+      }
     },
-  });
+  })
 
 export const closeMongoConnection = async () => {
-  if (mongod) await mongod.stop();
-};
+  if (mongod) await mongod.stop()
+}
 
 async function createAppMock(): Promise<NestFastifyApplication> {
   const moduleRef = await Test.createTestingModule({
@@ -43,15 +43,15 @@ async function createAppMock(): Promise<NestFastifyApplication> {
       MongooseModule.forFeature([]),
     ],
     providers: [ConfigService],
-  }).compile();
+  }).compile()
   const app = moduleRef.createNestApplication<NestFastifyApplication>(
     new FastifyAdapter(),
-  );
+  )
   // app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   await app
     .init()
-    .then((application) => application.getHttpAdapter().getInstance().ready());
-  return app;
+    .then((application) => application.getHttpAdapter().getInstance().ready())
+  return app
 }
 
-export default createAppMock;
+export default createAppMock
