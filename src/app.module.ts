@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 import configuration from './config/configuration'
 import { HealthModule } from './modules/health/health.module'
+import { HouseholdModule } from './modules/household/household.module'
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { HealthModule } from './modules/health/health.module'
       }),
     }),
     HealthModule,
+    HouseholdModule,
   ],
   controllers: [],
   providers: [ConfigService],
