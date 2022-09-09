@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { GenderType } from 'src/types/gender.type'
-import { MaritalStatusType } from 'src/types/marital-status.type'
-import { OccupationType } from 'src/types/occupation.type'
+import { GenderType } from '../types/gender.type'
+import { MaritalStatusType } from '../types/marital-status.type'
+import { OccupationType } from '../types/occupation.type'
 
 @Schema({
   versionKey: false,
@@ -22,7 +22,7 @@ export class HouseholdMember {
   readonly maritalStatus: MaritalStatusType
 
   @Prop({ required: false, type: String })
-  readonly spouse: string
+  readonly spouse?: string
 
   @Prop({ required: true, type: String })
   readonly occupationType: OccupationType
