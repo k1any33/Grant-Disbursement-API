@@ -32,7 +32,6 @@ export class HouseholdService {
     const householdDocument = await this.courseModel
       .findOne({ householdId })
       .exec()
-    console.log('test', householdDocument)
     if (!householdDocument) {
       return {
         success: false,
@@ -46,5 +45,12 @@ export class HouseholdService {
       { new: true },
     )
     return { success: true, data: updatedHouseholdDocument }
+  }
+
+  async getAll(): Promise<HouseholdResultSuccess> {
+    const householdDocuments = await this.courseModel.find().exec()
+    const count = await this.courseModel.countDocuments()
+
+    return { success: true, data: { items: householdDocuments, count } }
   }
 }
