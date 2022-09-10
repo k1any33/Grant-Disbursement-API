@@ -131,4 +131,31 @@ describe('HouseholdController', () => {
       expect(result.items).toBeInstanceOf(Array)
     })
   })
+
+  describe("Get a household by it's idthrough GET /household", () => {
+    it('should able to get a household with a valid householdId', async () => {
+      const payload: CreateHouseholdDto = {
+        housingType: HousingType.Condominium,
+      }
+      const createHouseholdResponse = await app
+        .inject()
+        .post('/household')
+        .body(payload)
+      const doc: CreateHouseholdResponseDto = createHouseholdResponse.json()
+      const response = await app.inject().get(`/household/${doc.householdId}`)
+      const householdDocument: CreateHouseholdResponseDto = JSON.parse(
+        response.body,
+      )
+      expect(householdDocument.householdId).toEqual(doc.householdId)
+      expect(householdDocument.housingType).toEqual(HousingType.Condominium)
+      expect(householdDocument.householdMembers).toBeInstanceOf(Array)
+      expect(new Date(householdDocument.createdAt)).toBeInstanceOf(Date)
+      expect(new Date(householdDocument.updatedAt)).toBeInstanceOf(Date)
+    })
+
+    it('should return 400 when getting a household that does not exist', async () => {
+      const response = await app.inject().get(`/household/${v4()}`)
+      expect(response.statusCode).toEqual(400)
+    })
+  })
 })
