@@ -10,6 +10,7 @@ import { MaritalStatusType } from '../../src/types/marital-status.type'
 import { OccupationType } from '../../src/types/occupation.type'
 import createAppMock, { closeMongoConnection } from '../fixtures/app.mock'
 import { v4 } from 'uuid'
+import { GetHouseholdsResponseDto } from '../../src/modules/household/dto/get-household.response.dto'
 
 let app: NestFastifyApplication
 
@@ -82,7 +83,6 @@ describe('HouseholdController', () => {
       expect(response.statusCode).toEqual(200)
 
       const householdDocument: HouseholdResponseDto = JSON.parse(response.body)
-      console.log(householdDocument.householdMembers)
       expect(householdDocument.householdId).toEqual(householdId)
       expect(householdDocument.housingType).toEqual(HousingType.Condominium)
       expect(householdDocument.householdMembers).toHaveLength(1)
@@ -119,6 +119,16 @@ describe('HouseholdController', () => {
         .patch(`/household/${householdId}`)
         .body(invalidPayload)
       expect(response.statusCode).toEqual(400)
+    })
+  })
+
+  describe('Get all households through GET /household', () => {
+    it('should able to get all household', async () => {
+      const response = await app.inject().get('/household')
+      expect(response.statusCode).toEqual(200)
+      const result: GetHouseholdsResponseDto = response.json()
+      expect(result.count).toEqual(3)
+      expect(result.items).toBeInstanceOf(Array)
     })
   })
 })
