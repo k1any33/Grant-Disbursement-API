@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   InternalServerErrorException,
@@ -16,6 +17,7 @@ import { HouseholdResponseDto } from './dto/household.response.dto'
 import { UpdateHouseholdMembersDto } from './dto/update-members.dto'
 import { HouseholdService } from './household.service'
 import { v4 } from 'uuid'
+import { GetHouseholdsResponseDto } from './dto/get-household.response.dto'
 
 @ApiTags('Household')
 @Controller('household')
@@ -79,6 +81,25 @@ export class HouseholdController {
       throw new HttpException(result.message, result.statusCode)
     }
 
+    return result.data
+  }
+
+  @Get()
+  @ApiOperation({
+    summary: 'Get all households available',
+    description: 'Get all available households that are created',
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: GetHouseholdsResponseDto })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error fetching all households',
+  })
+  async getAll(): Promise<GetHouseholdsResponseDto | HttpException> {
+    const result = await this.householdService.getAll().catch(({ message }) => {
+      // TODO: Replace with logger
+      console.log(message)
+      throw new InternalServerErrorException('Error fetching all households')
+    })
     return result.data
   }
 }
