@@ -5,11 +5,10 @@ import { OccupationType } from '../types/occupation.type'
 
 @Schema({
   versionKey: false,
-  _id: true,
   timestamps: true,
 })
 export class HouseholdMember {
-  @Prop({ unique: true, required: true, type: String })
+  @Prop({ required: true, type: String })
   readonly memberId: string
 
   @Prop({ required: true, type: String })

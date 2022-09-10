@@ -29,6 +29,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api-docs', app, document)
 
-  await app.listen(appConfig.get('port') | 8080, '0.0.0.0')
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  await app.listen(appConfig.get('port')!, '0.0.0.0')
 }
 bootstrap()
