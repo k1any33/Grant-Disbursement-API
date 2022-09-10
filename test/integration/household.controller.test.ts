@@ -1,9 +1,15 @@
 import { NestFastifyApplication } from '@nestjs/platform-fastify'
 import { CreateHouseholdDto } from '../../src/modules/household/dto/create-household.dto'
 import { CreateHouseholdResponseDto } from '../../src/modules/household/dto/create-household.response.dto'
+import { HouseholdResponseDto } from '../../src/modules/household/dto/household.response.dto'
+import { UpdateHouseholdMembersDto } from '../../src/modules/household/dto/update-members.dto'
 import { HouseholdController } from '../../src/modules/household/household.controller'
+import { GenderType } from '../../src/types/gender.type'
 import { HousingType } from '../../src/types/housing.type'
+import { MaritalStatusType } from '../../src/types/marital-status.type'
+import { OccupationType } from '../../src/types/occupation.type'
 import createAppMock, { closeMongoConnection } from '../fixtures/app.mock'
+import { v4 } from 'uuid'
 
 let app: NestFastifyApplication
 
@@ -43,13 +49,76 @@ describe('HouseholdController', () => {
       expect(new Date(householdDocument.createdAt)).toBeInstanceOf(Date)
       expect(new Date(householdDocument.updatedAt)).toBeInstanceOf(Date)
     })
+
+    it('should return 400 when creating a household with an invalid housing type enum value', async () => {
+      const payload = {
+        housingType: 'private',
+      }
+      const response = await app.inject().post('/household').body(payload)
+      expect(response.statusCode).toEqual(400)
+    })
   })
 
-  it('should return 400 when creating a household with an invalid housing type enum value', async () => {
-    const payload = {
-      housingType: 'private',
+  describe('Update household members through PATCH /household/:householdId', () => {
+    const payload: UpdateHouseholdMembersDto = {
+      name: 'John Smith',
+      gender: GenderType.Male,
+      maritalStatus: MaritalStatusType.Married,
+      spouse: 'Lena',
+      occupationType: OccupationType.Employed,
+      annualIncome: 50000,
+      DOB: new Date('1998-12-21'),
     }
-    const response = await app.inject().post('/household').body(payload)
-    expect(response.statusCode).toEqual(400)
+    it('should able to update a household with a valid housing member details', async () => {
+      const createHouseholdResponse = await app
+        .inject()
+        .post('/household')
+        .body({ housingType: HousingType.Condominium })
+      const householdId = createHouseholdResponse.json().householdId
+      const response = await app
+        .inject()
+        .patch(`/household/${householdId}`)
+        .body(payload)
+      expect(response.statusCode).toEqual(200)
+
+      const householdDocument: HouseholdResponseDto = JSON.parse(response.body)
+      console.log(householdDocument.householdMembers)
+      expect(householdDocument.householdId).toEqual(householdId)
+      expect(householdDocument.housingType).toEqual(HousingType.Condominium)
+      expect(householdDocument.householdMembers).toHaveLength(1)
+      expect(new Date(householdDocument.createdAt)).toBeInstanceOf(Date)
+      expect(new Date(householdDocument.updatedAt)).toBeInstanceOf(Date)
+    })
+
+    it('should return 400 when updating a household with a housingId that does not exist', async () => {
+      const response = await app
+        .inject()
+        .patch(`/household/${v4()}`)
+        .body(payload)
+      expect(response.statusCode).toEqual(400)
+    })
+
+    it('should return 400 when updating a household with invalid payload', async () => {
+      const createHouseholdResponse = await app
+        .inject()
+        .post('/household')
+        .body({ housingType: HousingType.Condominium })
+      const householdId = createHouseholdResponse.json().householdId
+
+      const invalidPayload = {
+        name: 1111,
+        gender: 'invalid enum',
+        maritalStatus: MaritalStatusType.Married,
+        spouse: 32,
+        occupationType: OccupationType.Employed,
+        annualIncome: 50000,
+        DOB: new Date('1998-12-21'),
+      }
+      const response = await app
+        .inject()
+        .patch(`/household/${householdId}`)
+        .body(invalidPayload)
+      expect(response.statusCode).toEqual(400)
+    })
   })
 })
