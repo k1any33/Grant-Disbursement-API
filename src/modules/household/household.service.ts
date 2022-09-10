@@ -53,4 +53,22 @@ export class HouseholdService {
 
     return { success: true, data: { items: householdDocuments, count } }
   }
+
+  async getOne(
+    householdId: string,
+  ): Promise<HouseholdResultSuccess | HouseholdResultFailure> {
+    const householdDocument = await this.courseModel
+      .findOne({ householdId })
+      .exec()
+
+    if (!householdDocument) {
+      return {
+        success: false,
+        statusCode: 400,
+        message: `Household of this id: ${householdId} does not exist`,
+      }
+    }
+
+    return { success: true, data: householdDocument }
+  }
 }
