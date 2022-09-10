@@ -29,8 +29,8 @@ export class HouseholdMember {
   @Prop({ required: true, type: Number })
   readonly annualIncome: number
 
-  @Prop({ required: true, type: String })
-  readonly DOB: string
+  @Prop({ required: true, type: Date() })
+  readonly DOB: Date
 }
 
 export const HouseholdMemberSchema =
