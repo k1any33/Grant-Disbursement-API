@@ -3,6 +3,7 @@ import {
   Controller,
   HttpException,
   HttpStatus,
+  InternalServerErrorException,
   Post,
 } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
@@ -29,10 +30,13 @@ export class HouseholdController {
   async create(
     @Body() createHouseholdDto: CreateHouseholdDto,
   ): Promise<CreateHouseholdResponseDto | HttpException> {
-    const result = await this.householdService.create(createHouseholdDto)
-    if (!result.success) {
-      throw new HttpException(result.message, result.statusCode)
-    }
+    const result = await this.householdService
+      .create(createHouseholdDto)
+      .catch(({ message }) => {
+        // TODO: Replace with logger
+        console.log(message)
+        throw new InternalServerErrorException('Error creating household')
+      })
     return result.data
   }
 }
