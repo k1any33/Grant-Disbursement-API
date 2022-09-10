@@ -29,7 +29,7 @@ export class HouseholdMember {
   @Prop({ required: true, type: Number })
   readonly annualIncome: number
 
-  @Prop({ required: true, type: Date() })
+  @Prop({ required: true, type: Date })
   readonly DOB: Date
 }
 

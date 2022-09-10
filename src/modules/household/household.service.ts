@@ -29,18 +29,22 @@ export class HouseholdService {
     householdId: string,
     updateHouseholdMembersDto: UpdateHouseholdMembersDto,
   ): Promise<HouseholdResultSuccess | HouseholdResultFailure> {
-    const householdDocument = this.courseModel.findOne({ householdId }).exec()
-    if (!householdDocument)
+    const householdDocument = await this.courseModel
+      .findOne({ householdId })
+      .exec()
+    console.log('test', householdDocument)
+    if (!householdDocument) {
       return {
         success: false,
         statusCode: 400,
         message: `Household of this id: ${householdId} does not exist`,
       }
-    const updatedHouseholdDocument = this.courseModel.updateOne(
+    }
+    const updatedHouseholdDocument = this.courseModel.findOneAndUpdate(
       { householdId },
-      { $push: updateHouseholdMembersDto },
+      { $push: { householdMembers: updateHouseholdMembersDto } },
+      { new: true },
     )
-
     return { success: true, data: updatedHouseholdDocument }
   }
 }

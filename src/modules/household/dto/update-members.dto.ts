@@ -39,7 +39,7 @@ export class UpdateHouseholdMembersDto {
     description:
       'Can be either one of the following (Single, Married, Widowed, Separated, Divorced)',
     enum: MaritalStatusType,
-    example: 'Single',
+    example: 'Married',
   })
   readonly maritalStatus: MaritalStatusType
 
@@ -59,7 +59,7 @@ export class UpdateHouseholdMembersDto {
     description:
       'Can be either one of the following (Unemployed, Student, Employed)',
     enum: OccupationType,
-    example: 'Male',
+    example: 'Employed',
   })
   readonly occupationType: OccupationType
 
@@ -69,7 +69,7 @@ export class UpdateHouseholdMembersDto {
   @ApiProperty({
     required: true,
     description: 'Annual Income of the family member in SGD',
-    example: '0',
+    example: 50000,
   })
   readonly annualIncome: number
 

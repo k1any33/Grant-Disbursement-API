@@ -12,8 +12,10 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CreateHouseholdDto } from './dto/create-household.dto'
 import { CreateHouseholdResponseDto } from './dto/create-household.response.dto'
+import { HouseholdResponseDto } from './dto/household.response.dto'
 import { UpdateHouseholdMembersDto } from './dto/update-members.dto'
 import { HouseholdService } from './household.service'
+import { v4 } from 'uuid'
 
 @ApiTags('Household')
 @Controller('household')
@@ -46,11 +48,15 @@ export class HouseholdController {
 
   @Patch(':householdId')
   @ApiOperation({
-    summary: 'Create a household',
+    summary: 'Add a family member to household',
     description:
-      'Housing Type must be one of the following: HDB, Condominium, Landed',
+      'Gender can be one of the following: (Male, Female).\n Marital Status can be either one of the following (Single, Married, Widowed, Separated, Divorced).\n Occupation Type can be either one of the following (Unemployed, Student, Employed)',
   })
-  @ApiResponse({ status: HttpStatus.OK, type: '' })
+  @ApiResponse({ status: HttpStatus.OK, type: HouseholdResponseDto })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: `Household of this example id: ${v4()} does not exist`,
+  })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error updating household members',
@@ -59,7 +65,7 @@ export class HouseholdController {
     @Param('householdId', new ParseUUIDPipe({ version: '4' }))
     householdId: string,
     @Body() updateHouseholdMembersDto: UpdateHouseholdMembersDto,
-  ): Promise<HttpException> {
+  ): Promise<HouseholdResponseDto | HttpException> {
     const result = await this.householdService
       .updateHouseholdMembers(householdId, updateHouseholdMembersDto)
       .catch(({ message }) => {
@@ -69,8 +75,9 @@ export class HouseholdController {
           'Error updating household members',
         )
       })
-    if (!result.success)
+    if (!result.success) {
       throw new HttpException(result.message, result.statusCode)
+    }
 
     return result.data
   }
