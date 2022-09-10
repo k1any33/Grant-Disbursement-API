@@ -102,4 +102,35 @@ export class HouseholdController {
     })
     return result.data
   }
+
+  @Get(':householdId')
+  @ApiOperation({
+    summary: "Get a household by it's id",
+    description: "Get a household and it's details",
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: HouseholdResponseDto })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: `Household of this example id: ${v4()} does not exist`,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: `Error fetching household`,
+  })
+  async getOne(
+    @Param('householdId', new ParseUUIDPipe({ version: '4' }))
+    householdId: string,
+  ): Promise<HouseholdResponseDto | HttpException> {
+    const result = await this.householdService
+      .getOne(householdId)
+      .catch(({ message }) => {
+        // TODO: Replace with logger
+        console.log(message)
+        throw new InternalServerErrorException('Error fetching household')
+      })
+    if (!result.success) {
+      throw new HttpException(result.message, result.statusCode)
+    }
+    return result.data
+  }
 }
