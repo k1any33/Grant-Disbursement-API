@@ -13,11 +13,11 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CreateHouseholdDto } from './dto/create-household.dto'
 import { CreateHouseholdResponseDto } from './dto/create-household.response.dto'
-import { HouseholdResponseDto } from './dto/household.response.dto'
+import { HouseholdResponseDto } from '../../dto/household.response.dto'
 import { UpdateHouseholdMembersDto } from './dto/update-members.dto'
 import { HouseholdService } from './household.service'
 import { v4 } from 'uuid'
-import { GetHouseholdsResponseDto } from './dto/get-household.response.dto'
+import { GetHouseholdsResponseDto } from '../../dto/get-household.response.dto'
 
 @ApiTags('Household')
 @Controller('household')

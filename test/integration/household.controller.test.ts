@@ -1,7 +1,7 @@
 import { NestFastifyApplication } from '@nestjs/platform-fastify'
 import { CreateHouseholdDto } from '../../src/modules/household/dto/create-household.dto'
 import { CreateHouseholdResponseDto } from '../../src/modules/household/dto/create-household.response.dto'
-import { HouseholdResponseDto } from '../../src/modules/household/dto/household.response.dto'
+import { HouseholdResponseDto } from '../../src/dto/household.response.dto'
 import { UpdateHouseholdMembersDto } from '../../src/modules/household/dto/update-members.dto'
 import { HouseholdController } from '../../src/modules/household/household.controller'
 import { GenderType } from '../../src/types/gender.type'
@@ -10,7 +10,7 @@ import { MaritalStatusType } from '../../src/types/marital-status.type'
 import { OccupationType } from '../../src/types/occupation.type'
 import createAppMock, { closeMongoConnection } from '../fixtures/app.mock'
 import { v4 } from 'uuid'
-import { GetHouseholdsResponseDto } from '../../src/modules/household/dto/get-household.response.dto'
+import { GetHouseholdsResponseDto } from '../../src/dto/get-household.response.dto'
 
 let app: NestFastifyApplication
 

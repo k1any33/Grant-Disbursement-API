@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { HousingType } from '../../../types/housing.type'
+import { HousingType } from '../types/housing.type'
 import { v4 } from 'uuid'
-import { HouseholdMember } from '../../../entities/household-member.entity'
+import { HouseholdMember } from '../entities/household-member.entity'
 
 export class HouseholdResponseDto {
   @ApiProperty({
@@ -26,7 +26,7 @@ export class HouseholdResponseDto {
     type: 'array',
     example: `
       [{
-        "name": "John Smith",
+        "name": "John Smith",w
         "gender": "Male",
         "maritalStatus": "Married",
         "spouse": "Lena",
@@ -45,8 +45,8 @@ export class HouseholdResponseDto {
   readonly totalAnnualIncome: number
 
   @ApiProperty({ type: 'date', example: '2022-09-09T12:02:50.519Z' })
-  readonly createdAt: Date
+  readonly createdAt?: Date
 
   @ApiProperty({ type: 'date', example: '2022-09-09T12:02:50.519Z' })
-  readonly updatedAt: Date
+  readonly updatedAt?: Date
 }
