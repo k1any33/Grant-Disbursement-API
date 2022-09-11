@@ -7,6 +7,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server-global-4.4'
 import { Household, HouseholdSchema } from '../../src/entities/household.entity'
 import { HouseholdModule } from '../../src/modules/household/household.module'
 import { HealthModule } from '../../src/modules/health/health.module'
+import { GrantModule } from '../../src/modules/grant/grant.module'
 
 let mongod: MongoMemoryServer
 
@@ -40,7 +41,7 @@ async function createAppMock(): Promise<NestFastifyApplication> {
       }),
       HealthModule,
       HouseholdModule,
-
+      GrantModule,
       rootMongooseTestModule(),
       MongooseModule.forFeature([{ schema: HouseholdSchema, name: Household.name }]),
     ],

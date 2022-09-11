@@ -26,7 +26,7 @@ export class HouseholdResponseDto {
     type: 'array',
     example: `
       [{
-        "name": "John Smith",w
+        "name": "John Smith",
         "gender": "Male",
         "maritalStatus": "Married",
         "spouse": "Lena",
@@ -45,8 +45,8 @@ export class HouseholdResponseDto {
   readonly totalAnnualIncome: number
 
   @ApiProperty({ type: 'date', example: '2022-09-09T12:02:50.519Z' })
-  readonly createdAt?: Date
+  readonly createdAt: Date
 
   @ApiProperty({ type: 'date', example: '2022-09-09T12:02:50.519Z' })
-  readonly updatedAt?: Date
+  readonly updatedAt: Date
 }

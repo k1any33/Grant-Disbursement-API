@@ -8,7 +8,6 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 import { GrantService } from './grant.service'
-import { v4 } from 'uuid'
 import { GetHouseholdsResponseDto } from '../../dto/get-household.response.dto'
 
 @ApiTags('Grant')
