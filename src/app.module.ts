@@ -9,7 +9,7 @@ import { HouseholdModule } from './modules/household/household.module'
 @Module({
   imports: [
     ConfigModule.forRoot({
-      ignoreEnvFile: true,
+      ignoreEnvFile: false,
       load: [configuration],
       isGlobal: true,
     }),
