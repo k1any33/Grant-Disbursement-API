@@ -35,4 +35,25 @@ export class GrantController {
     })
     return result.data
   }
+
+  @Get('multigeneration-scheme')
+  @ApiOperation({
+    summary: 'Multigeneration Scheme',
+    description: 'Get all available households that are eligible for Multigeneration Scheme',
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: GetHouseholdsResponseDto })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error fetching all households that are eligible for Multigeneration Scheme',
+  })
+  async getMultigenerationScheme(): Promise<GetHouseholdsResponseDto | HttpException> {
+    const result = await this.grantService.getMultigenerationScheme().catch(({ message }) => {
+      // TODO: Replace with logger
+      console.log(message)
+      throw new InternalServerErrorException(
+        'Error fetching all households that are eligible for Multigeneration Scheme',
+      )
+    })
+    return result.data
+  }
 }
