@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { HouseholdMember } from '../../entities/household-member.entity'
 import { Household, HouseholdDocument } from '../../entities/household.entity'
+import { HousingType } from '../../types/housing.type'
 import { OccupationType } from '../../types/occupation.type'
 import { GrantResultSuccess } from './types'
 
@@ -57,6 +58,34 @@ export class GrantService {
         })
         if (eligible) {
           eligibleHouseholds.push(household)
+        }
+      }
+    })
+
+    return {
+      success: true,
+      data: { items: eligibleHouseholds, count: eligibleHouseholds.length },
+    }
+  }
+
+  async getElderBonus(): Promise<GrantResultSuccess> {
+    const householdDocuments = await this.houseModel.find().lean().exec()
+    if (householdDocuments.length === 0) {
+      return { success: true, data: { items: [], count: 0 } }
+    }
+    const currentDate = new Date()
+    const eligibleHouseholds: Household[] = []
+    householdDocuments.forEach((household: Household) => {
+      if (household.housingType === HousingType.HDB) {
+        const eligibleMembers: HouseholdMember[] = []
+        household.householdMembers?.forEach((householdMember: HouseholdMember) => {
+          const age = currentDate.getFullYear() - new Date(householdMember.DOB).getFullYear()
+          if (age >= 55) {
+            eligibleMembers.push(householdMember)
+          }
+        })
+        if (eligibleMembers.length !== 0) {
+          eligibleHouseholds.push({ ...household, householdMembers: eligibleMembers })
         }
       }
     })
