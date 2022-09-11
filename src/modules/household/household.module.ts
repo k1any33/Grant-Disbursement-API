@@ -5,9 +5,7 @@ import { HouseholdController } from './household.controller'
 import { HouseholdService } from './household.service'
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: 'Household', schema: HouseholdSchema }]),
-  ],
+  imports: [MongooseModule.forFeature([{ name: 'Household', schema: HouseholdSchema }])],
   controllers: [HouseholdController],
   providers: [HouseholdService],
 })

@@ -9,13 +9,9 @@ import { HouseholdResultFailure, HouseholdResultSuccess } from './types'
 
 @Injectable()
 export class HouseholdService {
-  constructor(
-    @InjectModel(Household.name) private houseModel: Model<HouseholdDocument>,
-  ) {}
+  constructor(@InjectModel(Household.name) private houseModel: Model<HouseholdDocument>) {}
 
-  async create(
-    createHouseholdDto: CreateHouseholdDto,
-  ): Promise<HouseholdResultSuccess> {
+  async create(createHouseholdDto: CreateHouseholdDto): Promise<HouseholdResultSuccess> {
     const householdEntity: Household = {
       ...createHouseholdDto,
       householdId: v4(),
@@ -30,9 +26,7 @@ export class HouseholdService {
     householdId: string,
     updateHouseholdMembersDto: UpdateHouseholdMembersDto,
   ): Promise<HouseholdResultSuccess | HouseholdResultFailure> {
-    const householdDocument = await this.houseModel
-      .findOne({ householdId })
-      .exec()
+    const householdDocument = await this.houseModel.findOne({ householdId }).exec()
     if (!householdDocument) {
       return {
         success: false,
@@ -41,8 +35,7 @@ export class HouseholdService {
       }
     }
     const totalAnnualIncome =
-      householdDocument.totalAnnualIncome +
-      updateHouseholdMembersDto.annualIncome
+      householdDocument.totalAnnualIncome + updateHouseholdMembersDto.annualIncome
 
     const updatedHouseholdDocument = this.houseModel.findOneAndUpdate(
       { householdId },
@@ -64,12 +57,8 @@ export class HouseholdService {
     return { success: true, data: { items: householdDocuments, count } }
   }
 
-  async getOne(
-    householdId: string,
-  ): Promise<HouseholdResultSuccess | HouseholdResultFailure> {
-    const householdDocument = await this.houseModel
-      .findOne({ householdId })
-      .exec()
+  async getOne(householdId: string): Promise<HouseholdResultSuccess | HouseholdResultFailure> {
+    const householdDocument = await this.houseModel.findOne({ householdId }).exec()
 
     if (!householdDocument) {
       return {

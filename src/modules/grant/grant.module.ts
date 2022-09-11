@@ -5,9 +5,7 @@ import { GrantController } from './grant.controller'
 import { GrantService } from './grant.service'
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: 'Household', schema: HouseholdSchema }]),
-  ],
+  imports: [MongooseModule.forFeature([{ name: 'Household', schema: HouseholdSchema }])],
   controllers: [GrantController],
   providers: [GrantService],
 })

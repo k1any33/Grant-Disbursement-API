@@ -1,10 +1,7 @@
 import { ValidationPipe } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose'
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify'
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 import { Test } from '@nestjs/testing'
 import { MongoMemoryServer } from 'mongodb-memory-server-global-4.4'
 import { Household, HouseholdSchema } from '../../src/entities/household.entity'
@@ -45,19 +42,13 @@ async function createAppMock(): Promise<NestFastifyApplication> {
       HouseholdModule,
 
       rootMongooseTestModule(),
-      MongooseModule.forFeature([
-        { schema: HouseholdSchema, name: Household.name },
-      ]),
+      MongooseModule.forFeature([{ schema: HouseholdSchema, name: Household.name }]),
     ],
     providers: [ConfigService],
   }).compile()
-  const app = moduleRef.createNestApplication<NestFastifyApplication>(
-    new FastifyAdapter(),
-  )
+  const app = moduleRef.createNestApplication<NestFastifyApplication>(new FastifyAdapter())
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
-  await app
-    .init()
-    .then((application) => application.getHttpAdapter().getInstance().ready())
+  await app.init().then((application) => application.getHttpAdapter().getInstance().ready())
   return app
 }
 

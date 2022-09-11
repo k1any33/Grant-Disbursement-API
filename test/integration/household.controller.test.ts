@@ -39,9 +39,7 @@ describe('HouseholdController', () => {
       const response = await app.inject().post('/household').body(payload)
       expect(response.statusCode).toEqual(201)
 
-      const householdDocument: CreateHouseholdResponseDto = JSON.parse(
-        response.body,
-      )
+      const householdDocument: CreateHouseholdResponseDto = JSON.parse(response.body)
       expect(householdDocument.householdId).toMatch(
         /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
       )
@@ -77,10 +75,7 @@ describe('HouseholdController', () => {
         .post('/household')
         .body({ housingType: HousingType.Condominium })
       const householdId = createHouseholdResponse.json().householdId
-      const response = await app
-        .inject()
-        .patch(`/household/${householdId}`)
-        .body(payload)
+      const response = await app.inject().patch(`/household/${householdId}`).body(payload)
       expect(response.statusCode).toEqual(200)
 
       const householdDocument: HouseholdResponseDto = JSON.parse(response.body)
@@ -93,10 +88,7 @@ describe('HouseholdController', () => {
     })
 
     it('should return 400 when updating a household with a housingId that does not exist', async () => {
-      const response = await app
-        .inject()
-        .patch(`/household/${v4()}`)
-        .body(payload)
+      const response = await app.inject().patch(`/household/${v4()}`).body(payload)
       expect(response.statusCode).toEqual(400)
     })
 
@@ -116,10 +108,7 @@ describe('HouseholdController', () => {
         annualIncome: 50000,
         DOB: new Date('1998-12-21'),
       }
-      const response = await app
-        .inject()
-        .patch(`/household/${householdId}`)
-        .body(invalidPayload)
+      const response = await app.inject().patch(`/household/${householdId}`).body(invalidPayload)
       expect(response.statusCode).toEqual(400)
     })
   })
@@ -139,15 +128,10 @@ describe('HouseholdController', () => {
       const payload: CreateHouseholdDto = {
         housingType: HousingType.Condominium,
       }
-      const createHouseholdResponse = await app
-        .inject()
-        .post('/household')
-        .body(payload)
+      const createHouseholdResponse = await app.inject().post('/household').body(payload)
       const doc: CreateHouseholdResponseDto = createHouseholdResponse.json()
       const response = await app.inject().get(`/household/${doc.householdId}`)
-      const householdDocument: CreateHouseholdResponseDto = JSON.parse(
-        response.body,
-      )
+      const householdDocument: CreateHouseholdResponseDto = JSON.parse(response.body)
       expect(householdDocument.householdId).toEqual(doc.householdId)
       expect(householdDocument.housingType).toEqual(HousingType.Condominium)
       expect(householdDocument.householdMembers).toBeInstanceOf(Array)

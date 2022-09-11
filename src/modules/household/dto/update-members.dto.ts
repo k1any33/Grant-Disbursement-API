@@ -56,8 +56,7 @@ export class UpdateHouseholdMembersDto {
   @IsEnum(OccupationType)
   @ApiProperty({
     required: true,
-    description:
-      'Can be either one of the following (Unemployed, Student, Employed)',
+    description: 'Can be either one of the following (Unemployed, Student, Employed)',
     enum: OccupationType,
     example: 'Employed',
   })

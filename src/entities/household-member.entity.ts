@@ -33,5 +33,4 @@ export class HouseholdMember {
   readonly DOB: Date
 }
 
-export const HouseholdMemberSchema =
-  SchemaFactory.createForClass(HouseholdMember)
+export const HouseholdMemberSchema = SchemaFactory.createForClass(HouseholdMember)
