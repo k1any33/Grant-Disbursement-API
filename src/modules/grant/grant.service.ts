@@ -22,10 +22,21 @@ export class GrantService {
       if (household.totalAnnualIncome < 200000) {
         const eligibleMembers: HouseholdMember[] = []
         household.householdMembers?.forEach((householdMember: HouseholdMember) => {
-          const age = currentDate.getFullYear() - new Date(householdMember.DOB).getFullYear()
-          if (age < 16 && age > 0 && householdMember.occupationType === OccupationType.Student) {
-            eligibleMembers.push(householdMember)
+          const dob = new Date(householdMember.DOB)
+          const age = currentDate.getFullYear() - dob.getFullYear()
+          let eligible = false
+          if (householdMember.occupationType === OccupationType.Student) {
+            if (age < 16 && age > 0) {
+              eligible = true
+            } else if (
+              age === 16 &&
+              currentDate.getMonth() <= dob.getMonth() &&
+              currentDate.getDate() < dob.getDate()
+            ) {
+              eligible = true
+            }
           }
+          if (eligible) eligibleMembers.push(householdMember)
         })
         if (eligibleMembers.length !== 0) {
           eligibleHouseholds.push({ ...household, householdMembers: eligibleMembers })
@@ -51,8 +62,15 @@ export class GrantService {
         let eligible = false
         // breaking out of for loop early won't be significant as I dont expect the householdMembers array to be large
         household.householdMembers?.forEach((householdMember: HouseholdMember) => {
-          const age = currentDate.getFullYear() - new Date(householdMember.DOB).getFullYear()
+          const dob = new Date(householdMember.DOB)
+          const age = currentDate.getFullYear() - dob.getFullYear()
           if (age > 0 && (age < 18 || age > 55)) {
+            eligible = true
+          } else if (
+            age === 18 &&
+            currentDate.getMonth() <= dob.getMonth() &&
+            currentDate.getDate() < dob.getDate()
+          ) {
             eligible = true
           }
         })
