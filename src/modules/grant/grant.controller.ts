@@ -98,4 +98,25 @@ export class GrantController {
     })
     return result.data
   }
+
+  @Get('yolo-gst-grant')
+  @ApiOperation({
+    summary: 'YOLO GST Grant',
+    description: 'Get all available households that are eligible for YOLO GST Grant',
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: GetHouseholdsResponseDto })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error fetching all households that are eligible for YOLO GST Grant',
+  })
+  async getYoloGstGrant(): Promise<GetHouseholdsResponseDto | HttpException> {
+    const result = await this.grantService.getYoloGstGrant().catch(({ message }) => {
+      // TODO: Replace with logger
+      console.log(message)
+      throw new InternalServerErrorException(
+        'Error fetching all households that are eligible for YOLO GST Grant',
+      )
+    })
+    return result.data
+  }
 }

@@ -130,4 +130,22 @@ export class GrantService {
       data: { items: eligibleHouseholds, count: eligibleHouseholds.length },
     }
   }
+
+  async getYoloGstGrant(): Promise<GrantResultSuccess> {
+    const householdDocuments = await this.houseModel.find().lean().exec()
+    if (householdDocuments.length === 0) {
+      return { success: true, data: { items: [], count: 0 } }
+    }
+    const eligibleHouseholds: Household[] = []
+    householdDocuments.forEach((household: Household) => {
+      if (household.housingType === HousingType.HDB && household.totalAnnualIncome < 100000) {
+        eligibleHouseholds.push(household)
+      }
+    })
+
+    return {
+      success: true,
+      data: { items: eligibleHouseholds, count: eligibleHouseholds.length },
+    }
+  }
 }
