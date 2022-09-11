@@ -77,4 +77,25 @@ export class GrantController {
     })
     return result.data
   }
+
+  @Get('baby-sunshine-grant')
+  @ApiOperation({
+    summary: 'Baby Sunshine Grant',
+    description: 'Get all available households that are eligible for Baby Sunshine Grant',
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: GetHouseholdsResponseDto })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error fetching all households that are eligible for Baby Sunshine Grant',
+  })
+  async getBabySunshineGrant(): Promise<GetHouseholdsResponseDto | HttpException> {
+    const result = await this.grantService.getBabySunshineGrant().catch(({ message }) => {
+      // TODO: Replace with logger
+      console.log(message)
+      throw new InternalServerErrorException(
+        'Error fetching all households that are eligible for Baby Sunshine Grant',
+      )
+    })
+    return result.data
+  }
 }
