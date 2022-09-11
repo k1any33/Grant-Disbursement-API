@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { Transform, Type } from 'class-transformer'
 import {
   IsDateString,
   IsEnum,
@@ -6,6 +7,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  MaxDate,
   Min,
 } from 'class-validator'
 import { GenderType } from '../../../types/gender.type'
@@ -72,11 +74,12 @@ export class UpdateHouseholdMembersDto {
   })
   readonly annualIncome: number
 
+  @IsNotEmpty()
   @IsDateString('yyyy-mm-dd')
   @ApiProperty({
     required: true,
     description: 'Date of birth',
     example: '1998-12-21',
   })
-  readonly DOB: Date
+  readonly DOB: string
 }

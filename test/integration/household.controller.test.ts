@@ -67,7 +67,7 @@ describe('HouseholdController', () => {
       spouse: 'Lena',
       occupationType: OccupationType.Employed,
       annualIncome: 50000,
-      DOB: new Date('1998-12-21'),
+      DOB: '1998-12-21',
     }
     it('should able to update a household with a valid housing member details', async () => {
       const createHouseholdResponse = await app
