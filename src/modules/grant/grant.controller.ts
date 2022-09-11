@@ -56,4 +56,25 @@ export class GrantController {
     })
     return result.data
   }
+
+  @Get('elder-bonus')
+  @ApiOperation({
+    summary: 'Elder Bonus',
+    description: 'Get all available households that are eligible for Elder Bonus',
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: GetHouseholdsResponseDto })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error fetching all households that are eligible for Elder Bonus',
+  })
+  async getElderBonus(): Promise<GetHouseholdsResponseDto | HttpException> {
+    const result = await this.grantService.getElderBonus().catch(({ message }) => {
+      // TODO: Replace with logger
+      console.log(message)
+      throw new InternalServerErrorException(
+        'Error fetching all households that are eligible for Elder Bonus',
+      )
+    })
+    return result.data
+  }
 }
