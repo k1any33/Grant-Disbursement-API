@@ -1,73 +1,81 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Grant Disbursement API with Nest Js and Typescript
 
 ## Description
+A RESTful API that would decide on groups of people who are eligible for various upcoming government grants. These grants are disbursed based on certain criteria - like total household income, age, occupation, etc. 
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Accessing the app
+The app is deployed on Heroku. Click the link [here](https://ky-grant-disbursement-api.herokuapp.com/api-docs/static/index.html#/) to access the swagger docs. 
 
-## Installation
+## Running the app locally (Docker)
 
+Spin up a nest js and mongo container with docker
 ```bash
-$ npm install
+docker-compose up
 ```
 
-## Running the app
+Access the swagger docs [http:localhost:8080/api-docs](http:localhost:8080/api-docs)
+
+## Two ways to interact with mongo
+1. Open a new terminal (only through docker)
+```bash
+# List all the docker containers that are running locally on your machine
+docker ps 
+
+# Copy the container ID for mongo container and exec this command to access mongo shell
+docker exec -it <containerid> mongo
+```  
+Press "control c" to exit mongo shell
+
+2. Download mongo compass [here](https://www.mongodb.com/products/compass)
+
+Connect to mongodb using this connection string "mongodb://localhost:27017"
+
+## Running the app without docker
 
 ```bash
-# development
-$ npm run start
+# install node_modules
+npm i
 
-# watch mode
-$ npm run start:dev
+# Create a .env file in root folder
+touch .env
 
-# production mode
-$ npm run start:prod
+# Give a connection string for mongo, if it's not provided, make sure that mongo is installed locally on your operating system
+MONGO_URI:<mongoConnectionUri>
+
+# Run the app
+$ npm run dev
 ```
+## Deployment Steps
 
-## Test
+1. Create a main.yml file in .github/workflows
+2. Add these secret keys in github repository
 
+```bash
+heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+heroku_app_name: ${{secrets.APP_NAME}}
+heroku_email: ${{secrets.EMAIL_ADDRESS}}
+```
+3. The application will be deployed to heroku when a pull request is approved to merge to main branch
+
+## Integration Test
+
+Uses [Jest](https://jestjs.io/) for integration testing
 ```bash
 # unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
-## Support
+## Assumptions and Notes
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Total Annual Income is added to household entity for easier computation of grants
 
-## Stay in touch
+Updating Household Members Endpoint
+- Assume that only one household member can be added at one time
+- Assume that the annual income is in SGD
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Student Encouragement Bonus 
+- Assume that occupation must be student if not grant won’t be given
+- No restrictions on type of marital status
 
-## License
-
-Nest is [MIT licensed](LICENSE).
+Multigeneration Scheme
+- Assume that the occupation type doesn't have to be of type 'Student' for household members below the age of 18
