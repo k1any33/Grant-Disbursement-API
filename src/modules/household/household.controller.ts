@@ -13,11 +13,11 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CreateHouseholdDto } from './dto/create-household.dto'
 import { CreateHouseholdResponseDto } from './dto/create-household.response.dto'
-import { HouseholdResponseDto } from './dto/household.response.dto'
+import { HouseholdResponseDto } from '../../dto/household.response.dto'
 import { UpdateHouseholdMembersDto } from './dto/update-members.dto'
 import { HouseholdService } from './household.service'
 import { v4 } from 'uuid'
-import { GetHouseholdsResponseDto } from './dto/get-household.response.dto'
+import { GetHouseholdsResponseDto } from '../../dto/get-household.response.dto'
 
 @ApiTags('Household')
 @Controller('household')
@@ -27,8 +27,7 @@ export class HouseholdController {
   @Post()
   @ApiOperation({
     summary: 'Create a household',
-    description:
-      'Housing Type must be one of the following: HDB, Condominium, Landed',
+    description: 'Housing Type must be one of the following: HDB, Condominium, Landed',
   })
   @ApiResponse({ status: HttpStatus.CREATED, type: CreateHouseholdResponseDto })
   @ApiResponse({
@@ -38,13 +37,11 @@ export class HouseholdController {
   async create(
     @Body() createHouseholdDto: CreateHouseholdDto,
   ): Promise<CreateHouseholdResponseDto | HttpException> {
-    const result = await this.householdService
-      .create(createHouseholdDto)
-      .catch(({ message }) => {
-        // TODO: Replace with logger
-        console.log(message)
-        throw new InternalServerErrorException('Error creating household')
-      })
+    const result = await this.householdService.create(createHouseholdDto).catch(({ message }) => {
+      // TODO: Replace with logger
+      console.log(message)
+      throw new InternalServerErrorException('Error creating household')
+    })
     return result.data
   }
 
@@ -73,9 +70,7 @@ export class HouseholdController {
       .catch(({ message }) => {
         // TODO: Replace with logger
         console.log(message)
-        throw new InternalServerErrorException(
-          'Error updating household members',
-        )
+        throw new InternalServerErrorException('Error updating household members')
       })
     if (!result.success) {
       throw new HttpException(result.message, result.statusCode)
@@ -121,13 +116,11 @@ export class HouseholdController {
     @Param('householdId', new ParseUUIDPipe({ version: '4' }))
     householdId: string,
   ): Promise<HouseholdResponseDto | HttpException> {
-    const result = await this.householdService
-      .getOne(householdId)
-      .catch(({ message }) => {
-        // TODO: Replace with logger
-        console.log(message)
-        throw new InternalServerErrorException('Error fetching household')
-      })
+    const result = await this.householdService.getOne(householdId).catch(({ message }) => {
+      // TODO: Replace with logger
+      console.log(message)
+      throw new InternalServerErrorException('Error fetching household')
+    })
     if (!result.success) {
       throw new HttpException(result.message, result.statusCode)
     }

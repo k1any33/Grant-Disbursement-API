@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { HousingType } from '../../../types/housing.type'
+import { HousingType } from '../types/housing.type'
 import { v4 } from 'uuid'
-import { HouseholdMember } from '../../../entities/household-member.entity'
+import { HouseholdMember } from '../entities/household-member.entity'
 
 export class HouseholdResponseDto {
   @ApiProperty({
