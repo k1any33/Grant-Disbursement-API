@@ -21,11 +21,7 @@ export class GrantService {
       if (household.totalAnnualIncome < 200000) {
         const eligibleMembers: HouseholdMember[] = []
         household.householdMembers?.forEach((householdMember: HouseholdMember) => {
-          console.log(householdMember)
           const age = currentDate.getFullYear() - new Date(householdMember.DOB).getFullYear()
-          console.log(currentDate.getFullYear())
-          console.log(new Date(householdMember.DOB).getFullYear())
-          console.log(age)
           if (age < 16 && age > 0 && householdMember.occupationType === OccupationType.Student) {
             eligibleMembers.push(householdMember)
           }

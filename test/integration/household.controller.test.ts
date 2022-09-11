@@ -82,6 +82,9 @@ describe('HouseholdController', () => {
       expect(householdDocument.householdId).toEqual(householdId)
       expect(householdDocument.housingType).toEqual(HousingType.Condominium)
       expect(householdDocument.householdMembers).toHaveLength(1)
+      expect(householdDocument.householdMembers).toEqual(
+        expect.arrayContaining([expect.objectContaining(payload)]),
+      )
       expect(householdDocument.totalAnnualIncome).toEqual(50000)
       expect(new Date(householdDocument.createdAt)).toBeInstanceOf(Date)
       expect(new Date(householdDocument.updatedAt)).toBeInstanceOf(Date)
