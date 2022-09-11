@@ -10,7 +10,7 @@ import { HouseholdResultFailure, HouseholdResultSuccess } from './types'
 @Injectable()
 export class HouseholdService {
   constructor(
-    @InjectModel(Household.name) private courseModel: Model<HouseholdDocument>,
+    @InjectModel(Household.name) private houseModel: Model<HouseholdDocument>,
   ) {}
 
   async create(
@@ -19,8 +19,9 @@ export class HouseholdService {
     const householdEntity: Household = {
       ...createHouseholdDto,
       householdId: v4(),
+      totalAnnualIncome: 0,
     }
-    const householdDocument = await this.courseModel.create(householdEntity)
+    const householdDocument = await this.houseModel.create(householdEntity)
 
     return { success: true, data: householdDocument }
   }
@@ -29,7 +30,7 @@ export class HouseholdService {
     householdId: string,
     updateHouseholdMembersDto: UpdateHouseholdMembersDto,
   ): Promise<HouseholdResultSuccess | HouseholdResultFailure> {
-    const householdDocument = await this.courseModel
+    const householdDocument = await this.houseModel
       .findOne({ householdId })
       .exec()
     if (!householdDocument) {
@@ -39,17 +40,26 @@ export class HouseholdService {
         message: `Household of this id: ${householdId} does not exist`,
       }
     }
-    const updatedHouseholdDocument = this.courseModel.findOneAndUpdate(
+    const totalAnnualIncome =
+      householdDocument.totalAnnualIncome +
+      updateHouseholdMembersDto.annualIncome
+
+    const updatedHouseholdDocument = this.houseModel.findOneAndUpdate(
       { householdId },
-      { $push: { householdMembers: updateHouseholdMembersDto } },
+      {
+        $push: {
+          householdMembers: updateHouseholdMembersDto,
+        },
+        $set: { totalAnnualIncome },
+      },
       { new: true },
     )
     return { success: true, data: updatedHouseholdDocument }
   }
 
   async getAll(): Promise<HouseholdResultSuccess> {
-    const householdDocuments = await this.courseModel.find().exec()
-    const count = await this.courseModel.countDocuments()
+    const householdDocuments = await this.houseModel.find().exec()
+    const count = await this.houseModel.countDocuments()
 
     return { success: true, data: { items: householdDocuments, count } }
   }
@@ -57,7 +67,7 @@ export class HouseholdService {
   async getOne(
     householdId: string,
   ): Promise<HouseholdResultSuccess | HouseholdResultFailure> {
-    const householdDocument = await this.courseModel
+    const householdDocument = await this.houseModel
       .findOne({ householdId })
       .exec()
 

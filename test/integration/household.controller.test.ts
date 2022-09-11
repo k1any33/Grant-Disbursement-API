@@ -47,6 +47,7 @@ describe('HouseholdController', () => {
       )
       expect(householdDocument.housingType).toEqual(HousingType.Condominium)
       expect(householdDocument.householdMembers).toEqual([])
+      expect(householdDocument.totalAnnualIncome).toEqual(0)
       expect(new Date(householdDocument.createdAt)).toBeInstanceOf(Date)
       expect(new Date(householdDocument.updatedAt)).toBeInstanceOf(Date)
     })
@@ -86,6 +87,7 @@ describe('HouseholdController', () => {
       expect(householdDocument.householdId).toEqual(householdId)
       expect(householdDocument.housingType).toEqual(HousingType.Condominium)
       expect(householdDocument.householdMembers).toHaveLength(1)
+      expect(householdDocument.totalAnnualIncome).toEqual(50000)
       expect(new Date(householdDocument.createdAt)).toBeInstanceOf(Date)
       expect(new Date(householdDocument.updatedAt)).toBeInstanceOf(Date)
     })
@@ -132,7 +134,7 @@ describe('HouseholdController', () => {
     })
   })
 
-  describe("Get a household by it's idthrough GET /household", () => {
+  describe("Get a household by it's id through GET /household", () => {
     it('should able to get a household with a valid householdId', async () => {
       const payload: CreateHouseholdDto = {
         housingType: HousingType.Condominium,

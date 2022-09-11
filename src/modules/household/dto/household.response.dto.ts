@@ -38,6 +38,12 @@ export class HouseholdResponseDto {
   })
   readonly householdMembers: HouseholdMember
 
+  @ApiProperty({
+    type: 'number',
+    example: 50000,
+  })
+  readonly totalAnnualIncome: number
+
   @ApiProperty({ type: 'date', example: '2022-09-09T12:02:50.519Z' })
   readonly createdAt: Date
 

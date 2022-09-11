@@ -20,6 +20,10 @@ export class Household {
 
   @Prop({ required: false, type: MongooseSchema.Types.Array, _id: false })
   readonly householdMembers?: HouseholdMember[]
+
+  // This field is added to avoid heavy computation during grant calculation
+  @Prop({ required: true, type: Number })
+  readonly totalAnnualIncome: number
 }
 
 export const HouseholdSchema = SchemaFactory.createForClass(Household)
